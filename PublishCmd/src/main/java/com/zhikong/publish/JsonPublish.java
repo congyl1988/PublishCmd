@@ -21,10 +21,6 @@ package com.zhikong.publish;
 public class JsonPublish extends CmdPublish {
     protected JsonAdapter jsonAdapter;
 
-    {
-        logUtil = new com.zhikong.logsystem.LogUtil();
-    }
-
     public static JsonPublish getInstance() {
         if (instance == null) {
             instance = new JsonPublish();

@@ -19,9 +19,10 @@ package com.zhikong.publish;
  * wrapper android handler.
  */
 public class HandlerWrapper {
-//    private final android.os.Handler mainHandler = new android.os.Handler(android.os.Looper.getMainLooper());;
+    private final android.os.Handler mainHandler = new android.os.Handler(android.os.Looper.getMainLooper());
+    ;
 
     public void post(Runnable runnable) {
-//        mainHandler.post(runnable);
+        mainHandler.post(runnable);
     }
 }

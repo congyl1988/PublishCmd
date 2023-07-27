@@ -3,6 +3,7 @@ package com.zhikong.publish;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -14,10 +15,39 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                publishCmd();
+                publishJson();
+            }
+        });
+    }
+
+    public void publishCmd() {
         /**
          * 设定logUtil为 android log
          */
         CmdPublish.logUtil = new com.zhikong.androidlog.LogUtil();
+//        CmdPublish.logUtil = new com.zhikong.logsystem.LogUtil();//Print by System.out.println();
+
+        CmdPublish.logUtil.d("cong", "oncreate");
+
+        /**
+         * 发布命令.
+         * publish the cmd.
+         */
+        CmdPublish.getInstance().register(this)
+                .publish("hello", new UserBean());
+
+        CmdPublish.getInstance()
+                .publish("world", new UserBean())
+                .destroy();
+    }
+
+    public void publishJson() {
+        /****************************待解析json的发布********************************************************/
+        /****************************When publishing,do parsing json.********************************************************/
 
         /**
          * 添加json解析操作
@@ -53,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         /**
          * 串行调用
+         * call by one line.
          */
         JsonPublish.getInstance()
                 .register(this)//注册对象，
@@ -63,28 +94,33 @@ public class MainActivity extends AppCompatActivity {
                 .unregister(this);//解注册对象
     }
 
+    @Cmd(name = "world", threadMode = ThreadMode.PUBLISH)
+    public void xxx(UserBean userBean) {
+        CmdPublish.logUtil.w("cong", "world----------------------------" + userBean);
+    }
+
     @Cmd(name = "t", threadMode = ThreadMode.PUBLISH)
-    public void test(Object t) {
-        System.out.println("test----------------------------" + t);
+    public void publishCmd(Object t) {
+        CmdPublish.logUtil.w("cong", "test----------------------------" + t);
     }
 
     @Cmd(name = "empty", threadMode = ThreadMode.PUBLISH)
     public void empty() {
-        System.out.println("empty----------------------------");
+        CmdPublish.logUtil.w("cong", "empty----------------------------");
     }
 
     @Cmd(threadMode = ThreadMode.PUBLISH)
     public void hello(UserBean userBean) {
-        System.out.println("hello----------------------------" + userBean);
+        CmdPublish.logUtil.w("cong", "hello----------------------------" + userBean);
     }
 
     @Cmd(threadMode = ThreadMode.PUBLISH)
     public void someString(String s1, String s2) {
-        System.out.println("hello----------------------------" + s1 + "," + s2);
+        CmdPublish.logUtil.w("cong", "hello----------------------------" + s1 + "," + s2);
     }
 
     @CmdIntercept(cmdNames = {"t"})
     public void before() {
-        System.out.println("before----------------------------");
+        CmdPublish.logUtil.w("cong", "before----------------------------");
     }
 }

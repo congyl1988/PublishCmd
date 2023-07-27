@@ -18,11 +18,11 @@ package com.zhikong.logbase;
 public class LogBase {
     public static ILog logUtil;
 
-    public int w(String tag, String msg) {
+    public static int w(String tag, String msg) {
         return logUtil.d(tag, msg);
     }
 
-    public int e(String tag, String msg, Throwable tr) {
+    public static int e(String tag, String msg, Throwable tr) {
         return logUtil.e(tag, msg, tr);
     }
 
