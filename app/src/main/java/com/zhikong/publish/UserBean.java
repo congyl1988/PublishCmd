@@ -1,11 +1,23 @@
 package com.zhikong.publish;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class UserBean {
-    @SerializedName("name")
-    private String name;
+    @SerializedName("id")
+    @Expose
     private int id;
+    @SerializedName("name")
+    @Expose
+    private String name;
+
+    public UserBean() {
+    }
+
+    public UserBean(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
     public String getName() {
         return name;

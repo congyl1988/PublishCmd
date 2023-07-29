@@ -1,11 +1,13 @@
 package com.zhikong.publish;
 
-import com.zhikong.logbase.LogBase;
+import com.zhikong.publish.log.LogBase;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Executor;
@@ -37,6 +39,9 @@ public class CmdPublish extends LogBase {
     private final Executor executorIO = Executors.newCachedThreadPool();
     private HandlerWrapper handlerWrapper = new HandlerWrapper();
 
+    protected JsonAdapter jsonAdapter;
+    private final List<Intercept> intercepts = new ArrayList<>();
+
     protected CmdPublish() {
     }
 
@@ -45,6 +50,11 @@ public class CmdPublish extends LogBase {
             instance = new CmdPublish();
         }
         return instance;
+    }
+
+    public CmdPublish setJsonAdapter(JsonAdapter jsonAdapter) {
+        this.jsonAdapter = jsonAdapter;
+        return this;
     }
 
     /**
@@ -81,6 +91,90 @@ public class CmdPublish extends LogBase {
             }
         }
         return this;
+    }
+
+    /**
+     * 两层json的结构，即zhikong采用的协议设计。
+     * <p>
+     * Publish a cmd by base message object and json.
+     *
+     * @param cmdName    cmd name
+     * @param baseObject base message bean
+     * @param json       logic json bean
+     */
+    public void publish(String cmdName, Object baseObject, String json) {
+        CmdMethod cmdMethod = getCmdMethod(cmdName);
+        if (cmdMethod == null) {
+            w(TAG, "error:cmdMethod==null << " + cmdName);
+            return;
+        }
+        if (json == null) {
+            publish(cmdName);
+        } else {
+            logUtil.d(TAG, "publish " + cmdMethod);
+            Class<?> aClass = cmdMethod.aClass[0];
+            Object object = jsonAdapter.fromJson(json, aClass);
+            intercept(baseObject, object);
+            invoke(cmdMethod, object);
+        }
+    }
+
+    /**
+     * 发布并解析json数据到Cmd注解方法，json即是Cmd注解方法的解析类。
+     * <p>
+     * Publish a cmd by json. The json will be parse to be bean, which is parameter of cmd method.
+     *
+     * @param cmdName cmd name
+     * @param json    json String
+     */
+    public CmdPublish publishJson(String cmdName, String json) {
+        CmdMethod cmdMethod = getCmdMethod(cmdName);
+        if (cmdMethod == null) {
+            w(TAG, "error:cmdMethod==null << " + cmdName);
+            return this;
+        }
+        if (json == null) {
+            publish(cmdName);
+        } else {
+            Class<?> aClass = cmdMethod.aClass[0];
+            Object object = jsonAdapter.fromJson(json, aClass);
+            invoke(cmdMethod, object);
+        }
+        return this;
+    }
+
+    /**
+     * 具体业务消息有时候需要调用到基本消息的信息，所以添加了一个设定的机会。
+     * When publish a cmd ,It will get an chance to operation baseObject and jsonObject.
+     *
+     * @param baseObject 基本消息
+     * @param jsonObject 业务消息
+     */
+    protected void intercept(Object baseObject, Object jsonObject) {
+        for (Intercept i : intercepts) {
+            i.onIntercept(baseObject, jsonObject);
+        }
+    }
+
+    /**
+     * 例子，init消息，具体的业务消息又用到基本消息，所以设定了一个引用。
+     * <p>
+     * This is a sample to use intercept,When Init bean need the base message bean.
+     * The Init bean hold the reference of the base message bean.
+     * <p>
+     * GsonInterceptPublish.getInstance().addIntercept(new Intercept() {
+     *
+     * @param intercept
+     * @Override public void onIntercept(Object baseObject, Object jsonObject) {
+     * if (jsonObject instanceof Init
+     * && baseObject instanceof Message) {
+     * ((Init) jsonObject).message = (Message) baseObject;
+     * }
+     * }
+     * });
+     */
+    public void addIntercept(Intercept intercept) {
+        intercepts.add(intercept);
     }
 
     /**

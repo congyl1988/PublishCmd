@@ -1,6 +1,6 @@
 package com.zhikong.publish;
 
-import com.zhikong.logbase.LogBase;
+import com.zhikong.publish.log.LogBase;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;

@@ -1,9 +1,10 @@
 plugins {
     id 'com.android.library'
+    id "com.vanniktech.maven.publish" version "0.25.3"
 }
 
 android {
-    namespace 'com.zhikong.xcmd'
+    namespace 'com.zhikong.publish'
     compileSdk 32
 
     defaultConfig {
@@ -28,11 +29,8 @@ android {
 
 dependencies {
 
-    api project(path: ':logandroid')
-    api project(path: ':logbase')
-    api project(path: ':logsystem')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
 
-    api 'com.google.code.gson:gson:2.8.6'
 }
+

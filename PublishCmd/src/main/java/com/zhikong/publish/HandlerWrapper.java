@@ -20,7 +20,6 @@ package com.zhikong.publish;
  */
 public class HandlerWrapper {
     private final android.os.Handler mainHandler = new android.os.Handler(android.os.Looper.getMainLooper());
-    ;
 
     public void post(Runnable runnable) {
         mainHandler.post(runnable);

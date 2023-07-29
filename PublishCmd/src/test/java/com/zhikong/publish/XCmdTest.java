@@ -2,7 +2,7 @@ package com.zhikong.publish;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.zhikong.logsystem.LogUtil;
+import com.zhikong.publish.log.PrintLogUtil;
 
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ public class XCmdTest {
 
         CmdT<UserBean> cmdT = new CmdT<>();
 
-        JsonInterceptPublish.logUtil = new LogUtil();
+        JsonInterceptPublish.logUtil = new PrintLogUtil();
 
         /**
          *
