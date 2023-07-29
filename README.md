@@ -71,6 +71,7 @@ public Object fromJson(String json,Class<?> clazz){
         .unregister(this);//解注册对象
         }
 
+/*如下会收到命令，Cmd will run in these methods.*/
 @Cmd(name = "world", threadMode = ThreadMode.PUBLISH)
 public void xxx(UserBean userBean){
         CmdPublish.logUtil.w("cong","world----------------------------"+userBean);
