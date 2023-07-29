@@ -4,8 +4,8 @@ Like event-bus, but different. method name or annotation is the topic, not param
 
 ## Add PublishCmd to your project
 
-```
-implementation 'io.github.congyl1988.publishcmd:publishcmd:1.0.2'
+```java
+implementation 'io.github.congyl1988.publishcmd:publishcmd:1.0.3'
 ```
 
 ## PublishCmd in 2 steps
