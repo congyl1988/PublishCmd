@@ -74,7 +74,7 @@ Register and unregister your cmd. For example on Android, activities and fragmen
    CmdPublish.getInstance().publishJson("hello", json);
    ```
 
-You can run the @cmd method in different thread. As below
+You can run the @cmd method in different thread. As below:
 
 ```java
 //You can run the @cmd method in diffrent thread. 
