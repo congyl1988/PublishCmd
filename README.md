@@ -1,6 +1,6 @@
 # PublishCmd
 
-Like event-bus, but different. method name or annotation is the topic, not parameter object.
+PublishCmd is a publish/subscribe event bus for Android Like [EventBus](https://github.com/greenrobot/EventBus) , but different. method name or annotation is the topic, not parameter object.
 
 ## Add PublishCmd to your project
 
