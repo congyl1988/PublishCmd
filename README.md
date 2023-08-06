@@ -1,8 +1,17 @@
 # PublishCmd
 
-PublishCmd is a publish/subscribe event bus for Android Like [EventBus](https://github.com/greenrobot/EventBus) , but different. method name or annotation is the topic, not parameter object.
+PublishCmd is a publish/subscribe event bus for Android, Like [EventBus](https://github.com/greenrobot/EventBus) , but different. method name or annotation is the topic, not parameter object.
 
 ## Add PublishCmd to your project
+
+```java
+repositories{
+    maven {
+    	url 'https://s01.oss.sonatype.org/content/repositories/public/'
+	}
+}
+```
+
 
 ```java
 implementation 'io.github.congyl1988.publishcmd:publishcmd:1.0.3'
